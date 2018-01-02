@@ -16,12 +16,14 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
+[imageModel]: ./examples/model.png "Model Visualization"
 [image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
+[imageRecoverLeft]: ./examples/center_2018_01_02_01_59_03_751.jpg "Recovery Image left"
+[imageRecoverRight]: ./examples/center_2018_01_02_01_56_29_655.jpg "Recovery Image Right"
+[imageCenter]: ./examples/center_2017_12_27_22_00_11_669.jpg "Center Camera Image"
+[imageLeft]: ./examples/left_2017_12_27_22_00_11_669.jpg "Left Camera Image"
+[imageRight]: ./examples/right_2017_12_27_22_00_11_669.jpg "Right Camera Image"
+
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
 ## Rubric Points
@@ -130,7 +132,7 @@ After processing data, the car drove in the road with the simulartor autonomous 
 
 Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
 
-![Final model architecture](result/model.png)
+![Final model architecture][imageModel]
 
 #### 3. Creation of the Training Set & Training Process
 
@@ -138,26 +140,26 @@ To capture good driving behavior, I first recorded two laps on track one using c
 
 Center camera
 
-![Center Camera](data/training_data1/IMG/center_2017_12_27_22_00_11_669.jpg "original")
+![Center Camera][imageCenter]
 
 Left camera
 
-![Center Camera](data/training_data1/IMG/left_2017_12_27_22_00_11_669.jpg "original")
+![Center Camera][imageLeft]
 
 Right camera
 
-![Center Camera](data/training_data1/IMG/right_2017_12_27_22_00_11_669.jpg "original")
+![Center Camera][imageRight]
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to get back to the road.
 These images show what a recovery looks like:
 
 Off road recover from right
 
-![Off road recover from right](data/training_offroad_right/IMG/center_2018_01_02_01_56_29_655.jpg)
+![Off road recover from right][imageRecoverRight]
 
 Off road recover from left
 
-![Off road recover from right](data/traing_offroad_left/IMG/center_2018_01_02_01_59_03_751.jpg)
+![Off road recover from right][imageRecoverLeft]
 
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set.
