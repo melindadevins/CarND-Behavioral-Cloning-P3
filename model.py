@@ -4,6 +4,8 @@ import numpy as np
 import os
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Convolution2D, Cropping2D
+from keras.utils import plot_model
+from keras.models import load_model
 from keras.layers.pooling import MaxPooling2D
 import sklearn
 from sklearn.model_selection import train_test_split
@@ -24,8 +26,8 @@ class AutonomousDrive:
         samples = list(zip(imagePaths, steerings))
         train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 
-        print('Train samples: {}'.format(len(train_samples)))
-        print('Validation samples: {}'.format(len(validation_samples)))
+        print('Train data size: {}'.format(len(train_samples)))
+        print('Validation data size: {}'.format(len(validation_samples)))
 
         train_generator = self.generator(train_samples, batch_size=32)
         validation_generator = self.generator(validation_samples, batch_size=32)
@@ -74,6 +76,20 @@ class AutonomousDrive:
             steerings.extend(steers)
 
         return (centerCameraImageFilePaths, leftCameraImageFilePaths, rightCameraImageFilePaths, steerings)
+
+    def loadLogData(self, dataSubDirectory):
+        """
+        Parse the driving log file with base directory `dataPath`, and return all rows
+        If the file include headers, set hasHeader to True
+        """
+        rows = []
+        with open(dataSubDirectory + '/driving_log.csv') as csvFile:
+            reader = csv.reader(csvFile)
+            if self.hasHeader:
+                next(reader, None)
+            for row in reader:
+                rows.append(row)
+        return rows
 
     def combineAllCameraImagePath(self, centerCamImagePath, leftCamImagePath, rightCamImagePath, steering, correction):
         # combine the center, left, right camera images, and apply correction factor for the steering
@@ -149,22 +165,17 @@ class AutonomousDrive:
 
     # Helper functions
 
-    def loadLogData(self, dataSubDirectory):
-        """
-        Parse the driving log file with base directory `dataPath`, and return all rows
-        If the file include headers, set hasHeader to True
-        """
-        rows = []
-        with open(dataSubDirectory + '/driving_log.csv') as csvFile:
-            reader = csv.reader(csvFile)
-            if self.hasHeader:
-                next(reader, None)
-            for row in reader:
-                rows.append(row)
-        return rows
+    def visualLizeModel(self):
+        # Loads pre-trained model from file, then generate png file for model visualization
 
+        ## Load pre trained model
+        model = load_model('model.h5')
+
+        # Generate model visualization file
+        plot_model(model, to_file='result/model.png', show_shapes=True, show_layer_names=True)
 
 
 
 selfDrive = AutonomousDrive(dataPathRoot='data', hasHeader=True)
 selfDrive.train()
+selfDrive.visualLizeModel()
