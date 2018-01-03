@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import os
 from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Convolution2D, Cropping2D
+from keras.layers import Flatten, Dense, Lambda, Convolution2D, Cropping2D, Dropout
 from keras.utils import plot_model
 from keras.models import load_model
 from keras.layers.pooling import MaxPooling2D
@@ -39,7 +39,7 @@ class AutonomousDrive:
         model.compile(loss='mse', optimizer='adam')
         history_object = model.fit_generator(train_generator, samples_per_epoch=len(train_samples),
                                              validation_data=validation_generator,nb_val_samples=len(validation_samples),
-                                             nb_epoch=3, verbose=1)
+                                             nb_epoch=10, verbose=1)
 
         model.save('model.h5')
         print(history_object.history.keys())
@@ -136,11 +136,8 @@ class AutonomousDrive:
                 steering_y = np.array(steerings)
                 yield sklearn.utils.shuffle(image_X, steering_y)
 
-
-
     def createNVidiaModel(self):
         # Implement NVidia pipline
-
         #pre-process the image
         model = Sequential()
         model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape=(160, 320, 3)))
@@ -158,8 +155,14 @@ class AutonomousDrive:
 
         # Fully connected layers
         model.add(Dense(100))
+        model.add(Dropout(0.3))
+
         model.add(Dense(50))
+        model.add(Dropout(0.3))
+
         model.add(Dense(10))
+        model.add(Dropout(0.3))
+
         model.add(Dense(1))
         return model
 
@@ -172,7 +175,7 @@ class AutonomousDrive:
         model = load_model('model.h5')
 
         # Generate model visualization file
-        plot_model(model, to_file='result/model.png', show_shapes=True, show_layer_names=True)
+        plot_model(model, to_file='model.png', show_shapes=True, show_layer_names=True)
 
 
 
